@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JS Drum Kit</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="keys">
+
+        <div class="key" data-key="65">
+            <kbd>A</kbd>
+            <span class="sound">Bass3a</span>
+        </div>
+        <div class="key" data-key="83">
+            <kbd>S</kbd>
+            <span class="sound">Bass5a</span>
+        </div>
+        <div class="key" data-key="68">
+            <kbd>D</kbd>
+            <span class="sound">Bass6a</span>
+        </div>
+        <div class="key" data-key="70">
+            <kbd>F</kbd>
+            <span class="sound">Bass6c</span>
+        </div>
+        <div class="key" data-key="71">
+            <kbd>G</kbd>
+            <span class="sound">Drum-Sticks</span>
+        </div>
+        <div class="key" data-key="72">
+            <kbd>H</kbd>
+            <span class="sound">Floor-Tom-Drum</span>
+        </div>
+        <div class="key" data-key="74">
+            <kbd>J</kbd>
+            <span class="sound">Hi-Hat</span>
+        </div>
+        <div class="key" data-key="75">
+            <kbd>K</kbd>
+            <span class="sound">Snare</span>
+        </div>
+        <div class="key" data-key="76">
+            <kbd>L</kbd>
+            <span class="sound">Splash</span>
+        </div>
+
+    </div>
+
+    <audio data-key="65" src="sounds/Bass3a.mp3"></audio>
+    <audio data-key="83" src="sounds/Bass5a.mp3"></audio>
+    <audio data-key="68" src="sounds/Bass6a.mp3"></audio>
+    <audio data-key="70" src="sounds/Bass6c.mp3"></audio>
+    <audio data-key="71" src="sounds/Drum-Sticks.mp3"></audio>
+    <audio data-key="72" src="sounds/Floor-Tom-Drum.mp3"></audio>
+    <audio data-key="74" src="sounds/Hi-Hat.mp3"></audio>
+    <audio data-key="75" src="sounds/Snare.mp3"></audio>
+    <audio data-key="76" src="sounds/Splash.mp3"></audio>
+
+    <script>
+
+
+    // in the end we created this playSound function as its own entity for organization 
+    function playSound (e) { 
+
+        //link audio with key pressed
+
+        const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+        
+        const key = document.querySelector(`.key[data-key="${e.keyCode}"]`); 
+
+        if(!audio) return;// if no audio attached to key pressed, stop the function from running all together  
+
+        audio.currentTime = 0; //rewind to the start so next one can play
+
+        audio.play(); //play
+
+        key.classList.add('playing'); //same as addClass in jquery //playing class is for styles    
+    };
+    
+
+
+    function removeTransition(e) { //STEP 3
+        if(e.propertyName !== 'transform') return; //to skip if its not transition
+
+        this.classList.remove('playing'); //remove .playing after its done transforming
+    }
+
+
+    
+    window.addEventListener('keydown', playSound); //STEP 1
+
+    const keys = document.querySelectorAll('.key'); //STEP 2
+
+    keys.forEach(key => key.addEventListener('transitionend', removeTransition ))//each key will get an eventlistener called transitionend so when transition ends 'transform' gets removed
+
+
+
+
+    </script>
+
+
+</body>
+</html>
